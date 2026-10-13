@@ -631,50 +631,50 @@ export default function GateScannerPage() {
         {/* Subtle top accent line */}
         <div className="h-[2px] bg-gradient-to-r from-transparent via-[#86A995]/60 to-transparent" />
 
-        <div className="flex items-center gap-2.5 px-3 py-3 bg-[#0c0e12] border-b border-white/[0.08]">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-3 py-2 sm:py-3 bg-[#0c0e12] border-b border-white/[0.08]">
           {/* Gate select */}
-          <div className="relative flex-1">
+          <div className="relative flex-1 min-w-0">
             <select
               id="gate-select"
               value={gate}
               onChange={(e) => setGate(e.target.value as GateType)}
               className="w-full bg-[#13161c] border border-neutral-800 text-white font-bold rounded-xl
-                px-4 py-2.5 text-xs sm:text-[13px] outline-none appearance-none
+                px-2.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-[13px] outline-none appearance-none
                 focus:ring-2 focus:ring-[#86A995]/20 focus:border-[#86A995] cursor-pointer
-                transition-all duration-200 hover:border-neutral-700"
+                transition-all duration-200 hover:border-neutral-700 truncate pr-7 sm:pr-8"
             >
               <option value="MAIN_GATE" className="bg-[#111]">🚪 Main Gate</option>
               <option value="FEST_ARENA" className="bg-[#111]">🎪 Fest Arena</option>
             </select>
-            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none shrink-0" />
           </div>
 
           {/* Entry / Exit toggle */}
-          <div className="flex bg-[#13161c] border border-neutral-800 rounded-xl p-1 shrink-0">
+          <div className="flex bg-[#13161c] border border-neutral-800 rounded-xl p-0.5 sm:p-1 shrink-0">
             <button
               id="mode-entry-btn"
               onClick={() => setAction("ENTRY")}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-black tracking-wider
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-xs font-black tracking-wider
                 transition-all duration-200 ${
                   isEntry
                     ? "bg-[#86A995] text-[#050f09] shadow-[0_0_15px_rgba(134,169,149,0.3)]"
                     : "text-neutral-400 hover:text-white"
                 }`}
             >
-              <ArrowDownLeft size={13} className="stroke-[2.5]" />
+              <ArrowDownLeft size={12} className="stroke-[2.5]" />
               ENTRY
             </button>
             <button
               id="mode-exit-btn"
               onClick={() => setAction("EXIT")}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-black tracking-wider
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-xs font-black tracking-wider
                 transition-all duration-200 ${
                   !isEntry
                     ? "bg-[#86A995] text-[#050f09] shadow-[0_0_15px_rgba(134,169,149,0.3)]"
                     : "text-neutral-400 hover:text-white"
                 }`}
             >
-              <ArrowUpRight size={13} className="stroke-[2.5]" />
+              <ArrowUpRight size={12} className="stroke-[2.5]" />
               EXIT
             </button>
           </div>
@@ -683,14 +683,14 @@ export default function GateScannerPage() {
           <button
             id="log-toggle-btn"
             onClick={() => setShowLog((v) => !v)}
-            className={`shrink-0 p-2.5 rounded-xl border transition-all duration-200 ${
+            className={`shrink-0 p-2 sm:p-2.5 rounded-xl border transition-all duration-200 ${
               showLog
                 ? "bg-[#86A995]/15 border-[#86A995]/30 text-[#86A995] shadow-[0_0_12px_rgba(134,169,149,0.15)]"
                 : "bg-[#13161c] border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-700"
             }`}
             title="Scan log"
           >
-            <Activity size={16} />
+            <Activity size={15} />
           </button>
         </div>
       </div>

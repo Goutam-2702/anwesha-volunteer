@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import AdminNavbar from "./AdminNavbar";
 import AdminSidebar from "./AdminSidebar";
 import { useAuth } from "@/context/AuthContext";
-import { Scan, QrCode, LogOut } from "lucide-react";
+import { Scan, QrCode, LogOut, Menu, X } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,48 +19,86 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return (
       <div className="h-screen w-screen flex flex-col font-sans overflow-hidden bg-[#000000] text-white selection:bg-[#86A995] selection:text-black">
         {/* Top Header Bar */}
-        <header className="h-12 shrink-0 bg-[#000000] border-b border-neutral-800 flex items-center justify-between px-4 sm:px-6 z-20">
-          <div className="flex items-center gap-2.5 text-xs font-medium text-neutral-300">
-            <div className="w-6 h-6 rounded-lg bg-[#86A995]/15 border border-[#86A995]/30 flex items-center justify-center text-[#86A995]">
+        <header className="h-12 shrink-0 bg-[#000000] border-b border-neutral-800 flex items-center justify-between px-3 sm:px-6 z-20">
+          <div className="flex items-center gap-2 sm:gap-2.5 text-xs font-medium text-neutral-300">
+            {/* Mobile Hamburger Menu Toggle */}
+            <button
+              type="button"
+              onClick={toggleSidebar}
+              className="md:hidden p-1.5 -ml-1 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors cursor-pointer"
+              aria-label="Toggle Navigation Menu"
+            >
+              <Menu size={18} />
+            </button>
+            <div className="w-6 h-6 rounded-lg bg-[#86A995]/15 border border-[#86A995]/30 flex items-center justify-center text-[#86A995] shrink-0">
               <Scan size={13} />
             </div>
-            <span className="text-neutral-600">/</span>
-            <span className="font-extrabold text-white tracking-wide">Gate Scanner</span>
+            <span className="text-neutral-600 hidden sm:inline">/</span>
+            <span className="font-extrabold text-white tracking-wide text-xs sm:text-sm truncate">Gate Scanner</span>
           </div>
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[10px] font-bold tracking-wider">
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            <div className="flex items-center gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[10px] font-bold tracking-wider">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>LIVE</span>
             </div>
-            <div className="px-2.5 py-1 rounded-full bg-[#86A995]/15 border border-[#86A995]/30 text-[#86A995] text-[10px] font-black tracking-wider uppercase">
+            <div className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-[#86A995]/15 border border-[#86A995]/30 text-[#86A995] text-[10px] font-black tracking-wider uppercase">
               VOLUNTEER
             </div>
           </div>
         </header>
 
         {/* Content Area with Volunteer Sidebar and Scanner */}
-        <div className="flex flex-1 overflow-hidden relative">
-          {/* Volunteer Sidebar */}
-          <aside className="w-56 shrink-0 bg-[#000000] border-r border-neutral-800 flex flex-col justify-between select-none">
+        <div className="flex flex-1 overflow-hidden relative w-full">
+          {/* Mobile Backdrop Overlay */}
+          {isSidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-opacity"
+              onClick={() => setIsSidebarOpen(false)}
+            />
+          )}
+
+          {/* Volunteer Sidebar: Slide-over drawer on mobile, persistent on desktop (md+) */}
+          <aside
+            className={`
+              fixed md:static inset-y-0 left-0 z-50 md:z-auto
+              w-64 md:w-56 shrink-0 bg-[#000000] border-r border-neutral-800
+              flex flex-col justify-between select-none
+              transition-transform duration-200 ease-in-out
+              ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+            `}
+          >
             <div>
               {/* Brand Header */}
-              <div className="p-4 border-b border-neutral-800 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-[#86A995] flex items-center justify-center text-[#050f09] font-black shadow-[0_0_15px_rgba(134,169,149,0.25)] shrink-0">
-                  <QrCode size={18} className="stroke-[2.5]" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[10px] font-black tracking-widest text-[#86A995] uppercase leading-none mb-1">
-                    ANWESHA 2027
+              <div className="p-4 border-b border-neutral-800 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-[#86A995] flex items-center justify-center text-[#050f09] font-black shadow-[0_0_15px_rgba(134,169,149,0.25)] shrink-0">
+                    <QrCode size={18} className="stroke-[2.5]" />
                   </div>
-                  <div className="text-sm font-extrabold text-white tracking-tight leading-none">
-                    Volunteer Portal
+                  <div className="min-w-0">
+                    <div className="text-[10px] font-black tracking-widest text-[#86A995] uppercase leading-none mb-1">
+                      ANWESHA 2027
+                    </div>
+                    <div className="text-sm font-extrabold text-white tracking-tight leading-none">
+                      Volunteer Portal
+                    </div>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="md:hidden p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors cursor-pointer"
+                  aria-label="Close Sidebar"
+                >
+                  <X size={18} />
+                </button>
               </div>
 
               {/* Navigation Items (Only Scanner) */}
               <nav className="p-3">
-                <div className="px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-[#86A995]/30 text-white flex items-center justify-between shadow-[0_0_12px_rgba(134,169,149,0.08)]">
+                <div
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-[#86A995]/30 text-white flex items-center justify-between shadow-[0_0_12px_rgba(134,169,149,0.08)] cursor-pointer"
+                >
                   <div className="flex items-center gap-2.5">
                     <Scan size={16} className="text-[#86A995] shrink-0" />
                     <span className="text-xs font-bold text-white tracking-wide">Scanner</span>
@@ -97,8 +135,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           </aside>
 
-          {/* Main Scanner Page */}
-          <main className="flex-1 overflow-hidden bg-[#000000]">
+          {/* Main Scanner Page - 100% full width on mobile */}
+          <main className="flex-1 overflow-hidden bg-[#000000] w-full min-w-0">
             {children}
           </main>
         </div>
